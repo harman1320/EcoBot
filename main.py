@@ -5,6 +5,7 @@ from flask import Flask, render_template, jsonify, url_for, request
 
 load_dotenv()
 API_KEY = os.getenv("GROQ_API_KEY")
+print("API_KEY", API_KEY)
 
 app = Flask(__name__)
 
