@@ -14,30 +14,34 @@ def home():
 
 @app.route("/ask", methods = ["POST"])
 def ask():
-    client = Groq(api_key=API_KEY)
-    query = request.form.get('query')
+    try:
+        client = Groq(api_key=API_KEY)
+        query = request.form.get('query')
 
-    chat_completion = client.chat.completions.create(
-    messages=[
-            {
-                "role": "system",
-                "content": "You are a helpful assistant."
-            },
-            {
-                "role": "user",
-                "content": query,
-            }
-        ],
-        model="llama-3.3-70b-versatile",
-        temperature=0.5,
-        max_completion_tokens=1024
-    )
+        chat_completion = client.chat.completions.create(
+        messages=[
+                {
+                    "role": "system",
+                    "content": "You are a helpful assistant."
+                },
+                {
+                    "role": "user",
+                    "content": query,
+                }
+            ],
+            model="llama-3.3-70b-versatile",
+            temperature=0.5,
+            max_completion_tokens=1024
+        )
 
-    print(chat_completion.choices[0].message.content)
+        print(chat_completion.choices[0].message.content)
 
-    data = chat_completion.choices[0].message.content
+        data = chat_completion.choices[0].message.content
 
-    return jsonify({"response": data}), 200
+        return jsonify({"response": data}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True)
